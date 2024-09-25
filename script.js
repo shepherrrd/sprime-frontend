@@ -6,40 +6,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.querySelector(".video-container");
   let overlayTimeout;
   let lastTouchTime = 0;
-  
+
   // Hard-coded movie data
   const movieData = {
     metadata: [
       {
-        "timestamp": "0.0-30.0",
-        "actors": [
+        timestamp: "0.0-30.0",
+        actors: [
           {
-            "actor_id": 1,
-            "name": "Eric Winter",
-            "height": "6'2\"",
-            "profile_picture": "https://images.hellomagazine.com/horizon/landscape/949a32d9f11b-eric-winter-close-up-monte-carlo-tv-festival.jpg?tx=c_limit,w_960"
+            actor_id: 1,
+            name: "Eric Winter",
+            height: "6'2\"",
+            profile_picture:
+              "https://images.hellomagazine.com/horizon/landscape/949a32d9f11b-eric-winter-close-up-monte-carlo-tv-festival.jpg?tx=c_limit,w_960",
           },
           {
-            "actor_id": 2,
-            "name": "Mekia Cox",
-            "height": "5'5\"",
-            "profile_picture": "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcRkt3GicScNXHapDEIIjNw15RCgBtZOpiSfrB-oowDeUzIJgJbhhzBpRaFvBfHEjrt90scg7xM6g56RfEE"
+            actor_id: 2,
+            name: "Mekia Cox",
+            height: "5'5\"",
+            profile_picture:
+              "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcRkt3GicScNXHapDEIIjNw15RCgBtZOpiSfrB-oowDeUzIJgJbhhzBpRaFvBfHEjrt90scg7xM6g56RfEE",
           },
           {
-            "actor_id": 3,
-            "name": "Mellisa O'Neil",
-            "height": "5'4\"",
-            "profile_picture": "https://images.hellomagazine.com/horizon/landscape/7e8b3becbe4c-the-rookie-melissa.jpg?tx=c_limit,w_960"
+            actor_id: 3,
+            name: "Mellisa O'Neil",
+            height: "5'4\"",
+            profile_picture:
+              "https://images.hellomagazine.com/horizon/landscape/7e8b3becbe4c-the-rookie-melissa.jpg?tx=c_limit,w_960",
           },
           {
-            "actor_id": 4,
-            "name": "Nathan Fillion",
-            "height": "6'2\"",
-            "profile_picture": "https://static.wikia.nocookie.net/disney/images/c/c6/Nathan_Fillion.jpg/revision/latest?cb=20180724195130"
-          }
-        ]
-      }
-    ]
+            actor_id: 4,
+            name: "Nathan Fillion",
+            height: "6'2\"",
+            profile_picture:
+              "https://ntvb.tmsimg.com/assets/assets/67551_v9_bc.jpg",
+          },
+        ],
+      },
+    ],
   };
 
   const scenes = movieData.metadata;
@@ -87,7 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Toggle overlay visibility
   function toggleOverlay() {
-    if (overlay.style.transform === "translateX(0px)" || overlay.style.transform === "translateY(0px)") {
+    if (
+      overlay.style.transform === "translateX(0px)" ||
+      overlay.style.transform === "translateY(0px)"
+    ) {
       hideOverlay();
     } else {
       showOverlay();
@@ -162,7 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle window resize
   window.addEventListener("resize", () => {
-    if (overlay.style.transform === "translateX(0px)" || overlay.style.transform === "translateY(0px)") {
+    if (
+      overlay.style.transform === "translateX(0px)" ||
+      overlay.style.transform === "translateY(0px)"
+    ) {
       showOverlay();
     } else {
       hideOverlay();
