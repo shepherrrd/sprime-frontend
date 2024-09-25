@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("cast-overlay");
   const container = document.querySelector(".video-container");
   let overlayTimeout;
+  let lastTouchTime = 0;
   
   // Hard-coded movie data
   const movieData = {
@@ -46,12 +47,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show overlay
   function showOverlay() {
     clearTimeout(overlayTimeout);
-    overlay.style.transform = "translateX(0)";
+    if (window.innerWidth <= 768) {
+      overlay.style.transform = "translateY(0)";
+    } else {
+      overlay.style.transform = "translateX(0)";
+    }
   }
 
   // Hide overlay
   function hideOverlay() {
-    overlay.style.transform = "translateX(100%)";
+    if (window.innerWidth <= 768) {
+      overlay.style.transform = "translateY(100%)";
+    } else {
+      overlay.style.transform = "translateX(100%)";
+    }
   }
 
   // Update overlay content
@@ -76,6 +85,35 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
+  // Toggle overlay visibility
+  function toggleOverlay() {
+    if (overlay.style.transform === "translateX(0px)" || overlay.style.transform === "translateY(0px)") {
+      hideOverlay();
+    } else {
+      showOverlay();
+    }
+  }
+
+  // Handle user interaction
+  function handleInteraction(event) {
+    if (event.type === "touchend") {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTouchTime;
+      lastTouchTime = currentTime;
+
+      if (tapLength < 500 && tapLength > 0) {
+        toggleOverlay();
+      }
+    } else {
+      if (video.paused) {
+        showOverlay();
+      } else {
+        showOverlay();
+        overlayTimeout = setTimeout(hideOverlay, 3000);
+      }
+    }
+  }
+
   // Listen for time updates
   video.addEventListener("timeupdate", () => {
     const currentTime = video.currentTime;
@@ -89,28 +127,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Show overlay on hover or when paused
-  container.addEventListener("mousemove", () => {
-    if (video.paused) {
-      showOverlay();
-    } else {
-      showOverlay();
-      overlayTimeout = setTimeout(hideOverlay, 3000);
+  // Add event listeners for both mouse and touch events
+  container.addEventListener("mousemove", handleInteraction);
+  container.addEventListener("touchend", handleInteraction);
+
+  // Toggle play/pause on click/tap
+  container.addEventListener("click", (event) => {
+    if (event.target !== overlay && !overlay.contains(event.target)) {
+      if (video.paused) {
+        video.play();
+        hideOverlay();
+      } else {
+        video.pause();
+        showOverlay();
+      }
     }
   });
 
-  // Toggle play/pause on click
-  container.addEventListener("click", () => {
-    if (video.paused) {
-      video.play();
-      hideOverlay();
-    } else {
-      video.pause();
-      showOverlay();
-    }
-  });
-
-  // Hide overlay when mouse leaves the container (if video is playing)
+  // Hide overlay when mouse/touch leaves the container (if video is playing)
   container.addEventListener("mouseleave", () => {
     if (!video.paused) {
       hideOverlay();
@@ -125,6 +159,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initially update the overlay with the first scene
   updateOverlay(scenes[0]);
+
+  // Handle window resize
+  window.addEventListener("resize", () => {
+    if (overlay.style.transform === "translateX(0px)" || overlay.style.transform === "translateY(0px)") {
+      showOverlay();
+    } else {
+      hideOverlay();
+    }
+  });
 });
 
 // Add this at the end of your script.js file
